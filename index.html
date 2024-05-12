@@ -36,6 +36,9 @@
             cursor: pointer;
         }
 
+        .photo div {
+            display: inline;
+        }
 
     </style>
 </head>
@@ -45,6 +48,8 @@
     <script>
         const today = new Date();
         let page = today.getDay();
+        // localStorage.setItem("likesCounter",0);
+
 
         async function fetchPhotos () {
             try {
@@ -66,22 +71,39 @@
                     const img = document.createElement('img');
                     const user = document.createElement('p');
                     const likeBtn = document.createElement('button');
-                    const likeCounters = document.createElement('p');
+                    likeBtn.classList.add('like');
+                    const likeCount = document.createElement('div');
+                    const likeCounter = document.createElement('div');
+                    likeCounter.classList.add('likeCount');
                     img.src = photo.urls.small;
                     img.alt = photo.alt_description;
                     user.textContent = photo.user.name;
                     likeBtn.textContent = 'Like';
-                    likeCounters.textContent = 'Количество лайков ';
+                    let number = Number(localStorage.getItem("likesCounter"));
+                    likeCount.textContent = 'Количество лайков:  ';
+                    likeCounter.textContent = number.toString();
                     photoElement.append(img);
                     photoElement.append(user);
                     photoElement.append(likeBtn);
-                    photoElement.append(likeCounters);
+                    photoElement.append(likeCount);
+                    photoElement.append(likeCounter);
                     photoContainer.append(photoElement);
                 });
             }
+
+        let likesCounter = Number(localStorage.getItem("likesCounter"));
+        const like = document.querySelector('button.like');
+        const likeCount = document.querySelector('div.likeCount');
+        console.log(like);
+        like.addEventListener('click', function (e) {
+            likesCounter += 1;
+            likeCount.textContent = likesCounter
+            localStorage.setItem("likesCounter", likesCounter);
+        });
         }
-        
         loadPhoto();
+
+        
     </script>
 </body>
 </html>
